@@ -3,7 +3,7 @@
 
 <template>
   <div>
-    王东升 success 123
+    王东升 success
   </div>
 </template>
 
