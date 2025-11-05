@@ -1,8 +1,8 @@
-First step:
+# First step:
     codeing in master branch
-Second step:
+# Second step:
     do "npm run build"
-Third step:
+# Third step:
     do "git add commit push origin master"
-Last step:
+# Last step:
     do "npm run deploy"
