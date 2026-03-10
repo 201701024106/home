@@ -14,6 +14,7 @@
       <h4>清理后的结果（可直接复制到 Postman Import → Raw text）：</h4>
       <div class="result-box" v-text="cleanedCurl"></div>
     </div>
+    <button @click="copy" class="clean-btn">复制</button>
   </div>
 </template>
 
@@ -40,6 +41,10 @@ const cleanCurl = () => {
 
   cleanedCurl.value = cleaned;
 };
+const copy = async() => {
+  await navigator.clipboard.writeText(cleanedCurl.value);
+  alert('复制成功！');
+};
 </script>
 
 <style scoped>
@@ -51,7 +56,7 @@ const cleanCurl = () => {
 }
 
 .curl-cleaner-container {
-  max-width: 800px;
+  width: 1000px;
   margin: 50px auto;
   padding: 0 20px;
   display: flex;
@@ -96,7 +101,7 @@ const cleanCurl = () => {
   padding: 15px;
   min-height: 100px;
   background-color: #f9f9f9;
-  white-space: pre-wrap; /* 保留空格和换行（最终输出是单行，此属性兼容特殊情况） */
+  word-break: break-all;
   font-family: Consolas, monospace;
 }
 
