@@ -5,16 +5,38 @@ on:
 jobs:
   deploy:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write  # 关键：添加写权限
+      pages: write     # 关键：添加 Pages 权限
+      id-token: write  # 关键：添加 ID 令牌权限
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # 关键：拉取完整提交历史，避免 git 错误
+
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
           node-version: '20'
+          cache: 'npm'  # 优化：缓存 npm 依赖，加速构建
+
       - name: Install dependencies and build
-        run: npm install && npm run build # 安装依赖并构建生成 dist
+        run: |
+          npm install
+          npm run build
+          # 验证 dist 目录是否存在，避免部署空目录
+          if [ ! -d "./dist" ]; then
+            echo "Error: dist directory not found!"
+            exit 1
+          fi
+
+      - name: Setup Pages
+        uses: actions/configure-pages@v5  # 关键：初始化 Pages 配置
+
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v4
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./dist # 指定部署 dist 目录下的文件
+          publish_dir: ./dist
+          force_orphan: true  # 关键：强制创建孤儿分支（解决首次部署问题）
+          publish_branch: gh-pages  # 明确指定部署分支
